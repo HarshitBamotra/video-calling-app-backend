@@ -5,6 +5,7 @@
         "no-console" :{
             "severity":"warning",
             "options":["info", "debug", "log", "trace"]
-        }
+        },
+        "object-literal-sort-keys": false 
     }
 }

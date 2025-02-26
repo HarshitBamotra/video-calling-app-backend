@@ -1,10 +1,10 @@
+import cors from "cors";
 import express from "express";
 import http from "http";
-import cors from "cors"
+import {Server} from "socket.io";
 
 import serverconfig from "./config/server.config";
-
-import {Server} from "socket.io";
+import roomHandler from "./handlers/room.handler";
 
 const app = express();
 app.use(cors());
@@ -12,19 +12,20 @@ app.use(cors());
 const server = http.createServer(app);
 
 const io = new Server(server, {
-    cors:{
+    cors: {
         origin: "*",
-        methods:["GET", "POST"]
-    }
+        methods: ["GET", "POST"],
+    },
 });
 
-io.on("connection", (socket)=>{
+io.on("connection", (socket) => {
     console.log("new user connected");
-
-    socket.on("disconnect", ()=>{
+    roomHandler(socket);
+    socket.on("disconnect", () => {
         console.log("User disconnected");
-    })
-})
+    });
+
+});
 
 server.listen(serverconfig.PORT, () => {
     console.log(`server is running at ${serverconfig.PORT}`);
